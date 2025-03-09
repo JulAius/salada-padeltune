@@ -2,7 +2,7 @@
 import React from 'react';
 import PlayerTag from './PlayerTag';
 import { Final } from '../data/tournamentData';
-import { Trophy, Award, Medal } from 'lucide-react';
+import { Trophy, Award, Medal, Clock, MapPin } from 'lucide-react';
 
 interface FinalCardProps {
   final: Final;

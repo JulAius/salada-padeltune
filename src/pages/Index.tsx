@@ -3,6 +3,7 @@ import React from 'react';
 import TournamentHeader from '../components/TournamentHeader';
 import Timeline from '../components/Timeline';
 import PhaseGrid from '../components/PhaseGrid';
+import LeaderboardSection from '../components/LeaderboardSection';
 import FinalsSection from '../components/FinalsSection';
 import Footer from '../components/Footer';
 
@@ -27,6 +28,7 @@ const Index: React.FC = () => {
         <TournamentHeader />
         <Timeline />
         <PhaseGrid />
+        <LeaderboardSection />
         <FinalsSection />
         <Footer />
       </div>

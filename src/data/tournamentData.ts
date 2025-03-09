@@ -1,7 +1,8 @@
-
 export interface Player {
   id: number;
   tag: string;
+  points?: number;
+  rank?: number;
 }
 
 export interface Match {
@@ -30,10 +31,14 @@ export interface Final {
   };
 }
 
+// Mock leaderboard data - in a real app, this would be calculated from match results
 export const players: Player[] = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
   tag: (i + 1).toString(),
-}));
+  points: Math.floor(Math.random() * 100) + 20, // Random points between 20-120
+  rank: i + 1 // Will be recalculated based on points
+})).sort((a, b) => (b.points || 0) - (a.points || 0))
+  .map((player, index) => ({ ...player, rank: index + 1 }));
 
 export const sessions: Session[] = [
   {

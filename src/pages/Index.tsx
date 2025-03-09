@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 
 const Index: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <TournamentHeader />
         <Timeline />

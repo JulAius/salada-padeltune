@@ -1,18 +1,43 @@
 
 import React from 'react';
+import { Calendar, Users, Flag, Award, ClipboardList, PlayCircle, Coffee } from 'lucide-react';
 import { timelineSteps } from '../data/tournamentData';
 
 const Timeline: React.FC = () => {
+  // Map des icônes pour chaque étape de la timeline
+  const getIconForStep = (index: number) => {
+    const icons = [
+      <Users className="text-padel-blue" size={20} />,
+      <Flag className="text-padel-blue" size={20} />,
+      <PlayCircle className="text-padel-blue" size={20} />,
+      <PlayCircle className="text-padel-blue" size={20} />,
+      <PlayCircle className="text-padel-blue" size={20} />,
+      <PlayCircle className="text-padel-blue" size={20} />,
+      <PlayCircle className="text-padel-blue" size={20} />,
+      <ClipboardList className="text-padel-blue" size={20} />,
+      <Award className="text-padel-blue" size={20} />
+    ];
+    return icons[index] || <Calendar className="text-padel-blue" size={20} />;
+  };
+
   return (
-    <div className="mb-10">
-      <h2 className="text-2xl font-bold mb-4">Déroulement de la journée</h2>
+    <div className="mb-10 bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+        <Calendar className="mr-2 text-padel-blue" />
+        Déroulement de la journée
+      </h2>
       <div className="relative flex justify-between">
-        <div className="absolute top-[35px] left-0 w-full h-1 bg-gray-200 z-0"></div>
+        <div className="absolute top-[35px] left-0 w-full h-1.5 bg-gradient-to-r from-padel-blue to-padel-green rounded-full z-0"></div>
         {timelineSteps.map((step, index) => (
-          <div key={index} className="relative z-10 flex flex-col items-center flex-1 max-w-[80px]">
-            <div className="w-7 h-7 bg-white border-4 border-padel-blue rounded-full mb-2"></div>
+          <div 
+            key={index} 
+            className="relative z-10 flex flex-col items-center flex-1 max-w-[80px] transform transition-transform hover:scale-110 hover:-translate-y-1"
+          >
+            <div className="w-10 h-10 bg-white border-4 border-padel-blue rounded-full mb-2 flex items-center justify-center shadow-md">
+              {getIconForStep(index)}
+            </div>
             <div className="font-bold text-padel-blue text-sm text-center mb-1">{step.time}</div>
-            <div className="text-sm text-center text-gray-600">{step.label}</div>
+            <div className="text-sm text-center text-gray-600 bg-gray-50 px-2 py-1 rounded-full shadow-sm">{step.label}</div>
           </div>
         ))}
       </div>

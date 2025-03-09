@@ -11,7 +11,7 @@ const FinalsSection: React.FC = () => {
         <Trophy className="h-6 w-6 text-padel-gold" />
         <span>Finales • 11h45 - 12h30</span>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-8 rounded-b-lg">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-800/50 p-8 rounded-b-lg border border-gray-700">
         {finals.map((final, index) => (
           <FinalCard key={index} final={final} />
         ))}

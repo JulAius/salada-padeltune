@@ -10,11 +10,11 @@ interface SessionBlockProps {
 
 const SessionBlock: React.FC<SessionBlockProps> = ({ session }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 transform">
+    <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 transform border border-gray-700">
       <div className="bg-gradient-to-r from-padel-blue to-padel-blue/80 text-white p-3 text-center font-bold">
         {session.title}
       </div>
-      <div className="bg-padel-lightBlue p-2 text-center font-bold text-gray-700 text-sm border-b border-blue-200 flex items-center justify-center">
+      <div className="bg-gray-700 p-2 text-center font-bold text-gray-300 text-sm border-b border-gray-600 flex items-center justify-center">
         <Clock className="w-4 h-4 mr-1 text-padel-blue" />
         {session.time}
       </div>
@@ -24,7 +24,7 @@ const SessionBlock: React.FC<SessionBlockProps> = ({ session }) => {
         ))}
       </div>
       {session.pause && (
-        <div className="bg-gray-50 p-2 text-center italic text-gray-500 border-t border-dashed border-gray-200">
+        <div className="bg-gray-700/50 p-2 text-center italic text-gray-400 border-t border-dashed border-gray-600">
           {session.pause}
         </div>
       )}

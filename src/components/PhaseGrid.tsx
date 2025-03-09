@@ -11,7 +11,7 @@ const PhaseGrid: React.FC = () => {
         <Users className="h-6 w-6" />
         <span>Phase de Groupes</span>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-gray-100 p-6 rounded-b-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-gray-800/50 p-6 rounded-b-lg border border-gray-700">
         {sessions.map((session) => (
           <SessionBlock key={session.id} session={session} />
         ))}

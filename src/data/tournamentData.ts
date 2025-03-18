@@ -1,4 +1,3 @@
-
 export interface Player {
   id: number;
   tag: string;
@@ -35,6 +34,10 @@ export interface Final {
   players: {
     team1: number[];
     team2: number[];
+  };
+  score?: {
+    team1: number;
+    team2: number;
   };
 }
 
@@ -276,3 +279,24 @@ export const finals: Final[] = [
     }
   }
 ];
+
+// Function to get winners from finals
+export const getFinalWinners = () => {
+  const winners = {
+    champions: { winners: [] as number[], runners: [] as number[] },
+    europa: { winners: [] as number[], runners: [] as number[] },
+    conference: { winners: [] as number[], runners: [] as number[] }
+  };
+
+  finals.forEach(final => {
+    if (final.score) {
+      const winningTeam = final.score.team1 > final.score.team2 ? 'team1' : 'team2';
+      const losingTeam = winningTeam === 'team1' ? 'team2' : 'team1';
+      
+      winners[final.type].winners = [...final.players[winningTeam]];
+      winners[final.type].runners = [...final.players[losingTeam]];
+    }
+  });
+
+  return winners;
+};

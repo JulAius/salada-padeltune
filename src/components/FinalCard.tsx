@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import PlayerTag from './PlayerTag';
-import { Final } from '../data/tournamentData';
-import { Trophy, Award, Medal, Clock, MapPin } from 'lucide-react';
+import { Final, players } from '../data/tournamentData';
+import { Trophy, Award, Medal, Clock, MapPin, Check, Edit } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface FinalCardProps {
   final: Final;
+  onResultUpdate?: () => void;
 }
 
 const getHeaderClass = (type: Final['type']) => {
@@ -34,7 +36,44 @@ const getIcon = (type: Final['type']) => {
   }
 };
 
-const FinalCard: React.FC<FinalCardProps> = ({ final }) => {
+const FinalCard: React.FC<FinalCardProps> = ({ final, onResultUpdate }) => {
+  const [team1Score, setTeam1Score] = useState<number>(final.score?.team1 || 0);
+  const [team2Score, setTeam2Score] = useState<number>(final.score?.team2 || 0);
+  const [submitted, setSubmitted] = useState<boolean>(!!final.score);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  const handleSubmit = () => {
+    if (team1Score === team2Score) {
+      toast.error("Le score ne peut pas être égal pour une finale");
+      return;
+    }
+
+    // Update final score
+    final.score = {
+      team1: team1Score,
+      team2: team2Score
+    };
+
+    // Update UI
+    setSubmitted(true);
+    setIsEditing(false);
+    
+    // Notify parent component
+    if (onResultUpdate) {
+      onResultUpdate();
+    }
+
+    toast.success("Résultat de la finale enregistré!");
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  // Get actual player objects
+  const team1Players = final.players.team1.map(id => players.find(p => p.id === id)!);
+  const team2Players = final.players.team2.map(id => players.find(p => p.id === id)!);
+
   return (
     <div className="border border-gray-700 rounded-lg overflow-hidden transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl bg-gray-800">
       <div className={`p-4 text-center font-bold text-xl ${getHeaderClass(final.type)} flex items-center justify-center gap-2`}>
@@ -60,15 +99,88 @@ const FinalCard: React.FC<FinalCardProps> = ({ final }) => {
           <MapPin className="w-4 h-4 mr-1 text-padel-blue" />
           {final.court}
         </div>
-        <div className="flex justify-center items-center bg-gray-900 p-3 rounded-lg relative z-10">
-          {final.players.team1.map((playerId) => (
-            <PlayerTag key={playerId} tag={playerId.toString()} />
-          ))}
-          <span className="mx-2 text-gray-400 text-sm font-bold">vs</span>
-          {final.players.team2.map((playerId) => (
-            <PlayerTag key={playerId} tag={playerId.toString()} />
-          ))}
+        <div className="bg-gray-900/50 border border-gray-600 rounded-lg p-3 mb-2 relative z-10">
+          <div className="flex justify-center items-center">
+            {team1Players.map((player) => (
+              <PlayerTag key={player.id} tag={player.tag} />
+            ))}
+            
+            <div className="ml-2">
+              <input
+                type="number"
+                min="0"
+                max="9"
+                value={team1Score}
+                onChange={(e) => setTeam1Score(parseInt(e.target.value) || 0)}
+                className="w-10 h-8 bg-gray-800 border border-gray-600 rounded text-center text-white"
+                disabled={submitted && !isEditing}
+              />
+            </div>
+          </div>
         </div>
+        <div className="text-center font-bold text-gray-400 my-1 relative flex items-center justify-center">
+          <span className="absolute h-px w-10 bg-gradient-to-r from-transparent via-gray-500 to-transparent"></span>
+          VS
+          <span className="absolute h-px w-10 bg-gradient-to-r from-transparent via-gray-500 to-transparent"></span>
+        </div>
+        <div className="bg-gray-900/50 border border-gray-600 rounded-lg p-3 mb-4 relative z-10">
+          <div className="flex justify-center items-center">
+            {team2Players.map((player) => (
+              <PlayerTag key={player.id} tag={player.tag} />
+            ))}
+            
+            <div className="ml-2">
+              <input
+                type="number"
+                min="0"
+                max="9"
+                value={team2Score}
+                onChange={(e) => setTeam2Score(parseInt(e.target.value) || 0)}
+                className="w-10 h-8 bg-gray-800 border border-gray-600 rounded text-center text-white"
+                disabled={submitted && !isEditing}
+              />
+            </div>
+          </div>
+        </div>
+        
+        {(!submitted || isEditing) && (
+          <button 
+            onClick={handleSubmit}
+            className="w-full bg-padel-blue text-white py-2 px-3 rounded flex items-center justify-center hover:bg-padel-blue/80 transition-colors"
+          >
+            <Check className="w-4 h-4 mr-1" />
+            {isEditing ? "Mettre à jour" : "Valider le résultat"}
+          </button>
+        )}
+        
+        {submitted && !isEditing && (
+          <div className="w-full flex gap-2">
+            <div className="flex-1 bg-green-600/30 text-green-400 py-2 px-3 rounded flex items-center justify-center border border-green-600/50">
+              <Check className="w-4 h-4 mr-1" />
+              Résultat enregistré
+            </div>
+            <button 
+              onClick={handleEdit}
+              className="bg-amber-600/30 text-amber-400 py-2 px-3 rounded flex items-center justify-center border border-amber-600/50 hover:bg-amber-600/40 transition-colors"
+            >
+              <Edit className="w-4 h-4 mr-1" />
+              Modifier
+            </button>
+          </div>
+        )}
+
+        {submitted && (
+          <div className="mt-4 text-center">
+            <div className={`text-sm font-bold ${team1Score > team2Score ? 'text-padel-gold' : 'text-gray-400'}`}>
+              {team1Score > team2Score && <Trophy className="w-4 h-4 inline-block mr-1 text-padel-gold" />}
+              {team1Score > team2Score ? "GAGNANTS" : "FINALISTES"}
+            </div>
+            <div className={`text-sm font-bold ${team2Score > team1Score ? 'text-padel-gold' : 'text-gray-400'}`}>
+              {team2Score > team1Score && <Trophy className="w-4 h-4 inline-block mr-1 text-padel-gold" />}
+              {team2Score > team1Score ? "GAGNANTS" : "FINALISTES"}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ export interface Player {
   id: number;
   tag: string;
   points: number;
+  pointsScored: number;  // Total points scored
+  pointsConceded: number;  // Total points conceded
   rank?: number;
 }
 
@@ -36,17 +38,35 @@ export interface Final {
   };
 }
 
-// Initialize players with 0 points
+// Initialize players with 0 points and point differentials
 export const players: Player[] = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
   tag: (i + 1).toString(),
   points: 0,
+  pointsScored: 0,
+  pointsConceded: 0,
 }));
 
-// Update player rankings
+// Update player rankings with tiebreakers based on point differential
 export const updatePlayerRankings = () => {
-  // Sort players by points (descending)
-  const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+  // Sort players by points (descending), then by point differential
+  const sortedPlayers = [...players].sort((a, b) => {
+    // First sort by points
+    if (b.points !== a.points) {
+      return b.points - a.points;
+    }
+    
+    // If points are equal, sort by point differential (points scored - points conceded)
+    const aDiff = a.pointsScored - a.pointsConceded;
+    const bDiff = b.pointsScored - b.pointsConceded;
+    
+    if (bDiff !== aDiff) {
+      return bDiff - aDiff;
+    }
+    
+    // If point differential is also equal, sort by points scored
+    return b.pointsScored - a.pointsScored;
+  });
   
   // Assign ranks
   sortedPlayers.forEach((player, index) => {
@@ -64,14 +84,16 @@ export const calculatePoints = (match: Match) => {
   if (!match.score) return;
   
   const team1Win = match.score.team1 > match.score.team2;
-  const pointsWin = 3;
-  const pointsLoss = 1;
+  const pointsWin = 1;
+  const pointsLoss = 0;
   
-  // Award points to players
+  // Award points and update score differentials
   match.team1.forEach(player => {
     const playerIndex = players.findIndex(p => p.id === player.id);
     if (playerIndex !== -1) {
       players[playerIndex].points += team1Win ? pointsWin : pointsLoss;
+      players[playerIndex].pointsScored += match.score!.team1;
+      players[playerIndex].pointsConceded += match.score!.team2;
     }
   });
   
@@ -79,6 +101,8 @@ export const calculatePoints = (match: Match) => {
     const playerIndex = players.findIndex(p => p.id === player.id);
     if (playerIndex !== -1) {
       players[playerIndex].points += team1Win ? pointsLoss : pointsWin;
+      players[playerIndex].pointsScored += match.score!.team2;
+      players[playerIndex].pointsConceded += match.score!.team1;
     }
   });
   

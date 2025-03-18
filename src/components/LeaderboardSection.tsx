@@ -50,6 +50,12 @@ const LeaderboardSection: React.FC = () => {
     return "bg-gray-700 text-white";
   };
 
+  // Calculate point differential
+  const getPointDifferential = (player: typeof players[0]) => {
+    const diff = player.pointsScored - player.pointsConceded;
+    return diff > 0 ? `+${diff}` : diff;
+  };
+
   return (
     <div className="mb-10 transform transition-all duration-500 hover:shadow-xl rounded-lg overflow-hidden">
       <div className="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-4 text-center text-2xl rounded-t-lg flex items-center justify-center gap-2">
@@ -59,11 +65,12 @@ const LeaderboardSection: React.FC = () => {
       <div className="bg-gray-800/50 p-6 rounded-b-lg border border-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Column headers */}
-          <div className="col-span-1 md:col-span-3 grid grid-cols-4 md:grid-cols-5 gap-4 mb-2 text-gray-400 font-bold text-center">
+          <div className="col-span-1 md:col-span-3 grid grid-cols-4 md:grid-cols-6 gap-4 mb-2 text-gray-400 font-bold text-center">
             <div>Rang</div>
             <div>Joueur</div>
-            <div>Points</div>
-            <div className="hidden md:block">Matchs</div>
+            <div>V</div>
+            <div>Diff</div>
+            <div className="hidden md:block">Points</div>
             <div>Qualification</div>
           </div>
           
@@ -71,7 +78,7 @@ const LeaderboardSection: React.FC = () => {
           {rankedPlayers
             .sort((a, b) => (a.rank || 999) - (b.rank || 999))
             .map((player) => (
-              <div key={player.id} className="col-span-1 md:col-span-3 grid grid-cols-4 md:grid-cols-5 gap-4 bg-gray-800 rounded-lg p-3 items-center text-center border border-gray-700 hover:border-padel-blue transition-colors">
+              <div key={player.id} className="col-span-1 md:col-span-3 grid grid-cols-4 md:grid-cols-6 gap-4 bg-gray-800 rounded-lg p-3 items-center text-center border border-gray-700 hover:border-padel-blue transition-colors">
                 <div className={`flex justify-center items-center ${getRankStyle(player.rank || 999)} w-10 h-10 rounded-full mx-auto font-bold`}>
                   {player.rank}
                 </div>
@@ -83,8 +90,11 @@ const LeaderboardSection: React.FC = () => {
                   </span>
                 </div>
                 <div className="font-bold text-white">{player.points}</div>
+                <div className={`font-medium ${(player.pointsScored - player.pointsConceded) > 0 ? 'text-green-400' : (player.pointsScored - player.pointsConceded) < 0 ? 'text-red-400' : 'text-gray-400'}`}>
+                  {getPointDifferential(player)}
+                </div>
                 <div className="hidden md:block text-gray-300">
-                  {Math.floor(player.points / 3)}G {player.points % 3}P
+                  {player.pointsScored} / {player.pointsConceded}
                 </div>
                 <div className="flex justify-center">
                   {player.rank ? getQualificationBadge(player.rank) : '—'}

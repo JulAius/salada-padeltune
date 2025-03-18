@@ -4,6 +4,7 @@ import FinalCard from './FinalCard';
 import { finals } from '../data/tournamentData';
 import { Trophy } from 'lucide-react';
 import PodiumSection from './PodiumSection';
+import PlayerRegistration from './PlayerRegistration';
 
 const FinalsSection: React.FC = () => {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -14,6 +15,8 @@ const FinalsSection: React.FC = () => {
   
   return (
     <div className="mb-10">
+      <PlayerRegistration />
+      
       <div className="transform transition-all duration-500 hover:shadow-xl rounded-lg overflow-hidden mb-8">
         <div className="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-4 text-center text-2xl rounded-t-lg flex items-center justify-center gap-2">
           <Trophy className="h-6 w-6 text-padel-gold" />

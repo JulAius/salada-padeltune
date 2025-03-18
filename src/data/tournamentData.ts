@@ -1,9 +1,10 @@
 export interface Player {
   id: number;
   tag: string;
+  name: string;
   points: number;
-  pointsScored: number;  // Total points scored
-  pointsConceded: number;  // Total points conceded
+  pointsScored: number;
+  pointsConceded: number;
   rank?: number;
 }
 
@@ -41,25 +42,21 @@ export interface Final {
   };
 }
 
-// Initialize players with 0 points and point differentials
 export const players: Player[] = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
   tag: (i + 1).toString(),
+  name: "",
   points: 0,
   pointsScored: 0,
   pointsConceded: 0,
 }));
 
-// Update player rankings with tiebreakers based on point differential
 export const updatePlayerRankings = () => {
-  // Sort players by points (descending), then by point differential
   const sortedPlayers = [...players].sort((a, b) => {
-    // First sort by points
     if (b.points !== a.points) {
       return b.points - a.points;
     }
     
-    // If points are equal, sort by point differential (points scored - points conceded)
     const aDiff = a.pointsScored - a.pointsConceded;
     const bDiff = b.pointsScored - b.pointsConceded;
     
@@ -67,11 +64,9 @@ export const updatePlayerRankings = () => {
       return bDiff - aDiff;
     }
     
-    // If point differential is also equal, sort by points scored
     return b.pointsScored - a.pointsScored;
   });
   
-  // Assign ranks
   sortedPlayers.forEach((player, index) => {
     const playerIndex = players.findIndex(p => p.id === player.id);
     if (playerIndex !== -1) {
@@ -82,7 +77,6 @@ export const updatePlayerRankings = () => {
   return [...players];
 };
 
-// Calculate points based on match results
 export const calculatePoints = (match: Match) => {
   if (!match.score) return;
   
@@ -90,7 +84,6 @@ export const calculatePoints = (match: Match) => {
   const pointsWin = 1;
   const pointsLoss = 0;
   
-  // Award points and update score differentials
   match.team1.forEach(player => {
     const playerIndex = players.findIndex(p => p.id === player.id);
     if (playerIndex !== -1) {
@@ -109,11 +102,37 @@ export const calculatePoints = (match: Match) => {
     }
   });
   
-  // Update rankings
   updatePlayerRankings();
 };
 
-// Updated timelineSteps based on the image
+export const updatePlayerName = (playerId: number, name: string) => {
+  const playerIndex = players.findIndex(p => p.id === playerId);
+  if (playerIndex !== -1) {
+    players[playerIndex].name = name;
+  }
+};
+
+export const randomizePlayerNumbers = (playerNames: string[]) => {
+  const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
+  
+  for (let i = numbers.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+  }
+  
+  playerNames.forEach((name, index) => {
+    if (index < 12) {
+      const playerId = numbers[index];
+      const playerIndex = players.findIndex(p => p.id === playerId);
+      if (playerIndex !== -1) {
+        players[playerIndex].name = name;
+      }
+    }
+  });
+  
+  return [...players];
+};
+
 export const timelineSteps = [
   { time: "09h00", label: "Accueil joueurs" },
   { time: "09h20", label: "Annonce des équipes" },
@@ -126,7 +145,6 @@ export const timelineSteps = [
   { time: "11h40", label: "Finales" }
 ];
 
-// Updated sessions based on the new match schedule from the image
 export const sessions: Session[] = [
   {
     id: 1,
@@ -280,7 +298,6 @@ export const finals: Final[] = [
   }
 ];
 
-// Function to get winners from finals
 export const getFinalWinners = () => {
   const winners = {
     champions: { winners: [] as number[], runners: [] as number[] },
@@ -300,3 +317,4 @@ export const getFinalWinners = () => {
 
   return winners;
 };
+

@@ -6,9 +6,10 @@ import { Clock } from 'lucide-react';
 
 interface SessionBlockProps {
   session: Session;
+  onResultUpdate?: () => void;
 }
 
-const SessionBlock: React.FC<SessionBlockProps> = ({ session }) => {
+const SessionBlock: React.FC<SessionBlockProps> = ({ session, onResultUpdate }) => {
   return (
     <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 transform border border-gray-700">
       <div className="bg-gradient-to-r from-padel-blue to-padel-blue/80 text-white p-3 text-center font-bold">
@@ -20,7 +21,7 @@ const SessionBlock: React.FC<SessionBlockProps> = ({ session }) => {
       </div>
       <div className="p-4">
         {session.matches.map((match, index) => (
-          <MatchRow key={index} match={match} />
+          <MatchRow key={index} match={match} onResultUpdate={onResultUpdate} />
         ))}
       </div>
       {session.pause && (

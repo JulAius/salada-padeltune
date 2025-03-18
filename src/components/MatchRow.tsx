@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import PlayerTag from './PlayerTag';
 import { Match, calculatePoints } from '../data/tournamentData';
-import { MapPin, Check } from 'lucide-react';
+import { MapPin, Check, Edit } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface MatchRowProps {
@@ -14,6 +14,7 @@ const MatchRow: React.FC<MatchRowProps> = ({ match, onResultUpdate }) => {
   const [team1Score, setTeam1Score] = useState<number>(match.score?.team1 || 0);
   const [team2Score, setTeam2Score] = useState<number>(match.score?.team2 || 0);
   const [submitted, setSubmitted] = useState<boolean>(!!match.score);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleSubmit = () => {
     if (team1Score === team2Score) {
@@ -32,6 +33,7 @@ const MatchRow: React.FC<MatchRowProps> = ({ match, onResultUpdate }) => {
 
     // Update UI
     setSubmitted(true);
+    setIsEditing(false);
     
     // Notify parent component
     if (onResultUpdate) {
@@ -39,6 +41,10 @@ const MatchRow: React.FC<MatchRowProps> = ({ match, onResultUpdate }) => {
     }
 
     toast.success("Résultat enregistré avec succès!");
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
   };
 
   return (
@@ -60,7 +66,7 @@ const MatchRow: React.FC<MatchRowProps> = ({ match, onResultUpdate }) => {
             value={team1Score}
             onChange={(e) => setTeam1Score(parseInt(e.target.value) || 0)}
             className="w-10 h-8 bg-gray-800 border border-gray-600 rounded text-center text-white"
-            disabled={submitted}
+            disabled={submitted && !isEditing}
           />
         </div>
       </div>
@@ -82,25 +88,34 @@ const MatchRow: React.FC<MatchRowProps> = ({ match, onResultUpdate }) => {
             value={team2Score}
             onChange={(e) => setTeam2Score(parseInt(e.target.value) || 0)}
             className="w-10 h-8 bg-gray-800 border border-gray-600 rounded text-center text-white"
-            disabled={submitted}
+            disabled={submitted && !isEditing}
           />
         </div>
       </div>
       
-      {!submitted && (
+      {(!submitted || isEditing) && (
         <button 
           onClick={handleSubmit}
           className="mt-2 w-full bg-padel-blue text-white py-1 px-2 rounded flex items-center justify-center hover:bg-padel-blue/80 transition-colors"
         >
           <Check className="w-4 h-4 mr-1" />
-          Valider
+          {isEditing ? "Mettre à jour" : "Valider"}
         </button>
       )}
       
-      {submitted && (
-        <div className="mt-2 w-full bg-green-600/30 text-green-400 py-1 px-2 rounded flex items-center justify-center border border-green-600/50">
-          <Check className="w-4 h-4 mr-1" />
-          Résultat enregistré
+      {submitted && !isEditing && (
+        <div className="mt-2 w-full flex gap-2">
+          <div className="flex-1 bg-green-600/30 text-green-400 py-1 px-2 rounded flex items-center justify-center border border-green-600/50">
+            <Check className="w-4 h-4 mr-1" />
+            Résultat enregistré
+          </div>
+          <button 
+            onClick={handleEdit}
+            className="bg-amber-600/30 text-amber-400 py-1 px-2 rounded flex items-center justify-center border border-amber-600/50 hover:bg-amber-600/40 transition-colors"
+          >
+            <Edit className="w-4 h-4 mr-1" />
+            Modifier
+          </button>
         </div>
       )}
     </div>

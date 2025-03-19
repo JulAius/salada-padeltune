@@ -8,7 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collap
 
 const FinalsSection: React.FC = () => {
   const [refreshKey, setRefreshKey] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true); // Initialisé à true pour être déplié par défaut
   
   const handleResultUpdate = () => {
     setRefreshKey(prev => prev + 1);

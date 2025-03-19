@@ -29,6 +29,8 @@ const Index: React.FC = () => {
           ))}
         </div>
         
+        <TournamentHeader />
+        
         <div className="mb-6">
           <Link to="/tirage">
             <Button variant="outline" className="w-full bg-gradient-to-r from-amber-500/80 to-amber-600/80 text-white hover:from-amber-500 hover:to-amber-600 border-none shadow-lg hover:shadow-amber-500/20 transform transition-all duration-200 hover:-translate-y-1">
@@ -38,7 +40,6 @@ const Index: React.FC = () => {
           </Link>
         </div>
         
-        <TournamentHeader />
         <Timeline />
         <PhaseGrid />
         <LeaderboardSection />

@@ -7,7 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collap
 
 const PhaseGrid: React.FC = () => {
   const [refreshKey, setRefreshKey] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true); // Initialisé à true pour être déplié par défaut
 
   // Function to trigger refresh of components that use player rankings
   const handleResultUpdate = () => {

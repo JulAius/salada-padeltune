@@ -118,8 +118,8 @@ const Timeline: React.FC = () => {
               <tr className="border-b border-gray-700 bg-gray-800 hover:bg-gray-600/50 transition-colors">
                 <td className="px-4 py-3 font-medium">5</td>
                 <td className="px-4 py-3">(J3,J11) vs (J8,J10)</td>
-                <td className="px-4 py-3">(J4,J9) vs (J6,J7)</td>
-                <td className="px-4 py-3">(J1,J12) vs (J2,J5)</td>
+                <td className="px-4 py-3">(J4,J9) vs (J5,J7)</td>
+                <td className="px-4 py-3">(J1,J12) vs (J2,J6)</td>
               </tr>
             </tbody>
           </table>

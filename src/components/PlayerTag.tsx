@@ -1,18 +1,26 @@
-
 import React from 'react';
+import { players } from '../data/tournamentData';
 
 interface PlayerTagProps {
   tag: string;
 }
 
 const PlayerTag: React.FC<PlayerTagProps> = ({ tag }) => {
+  const player = players.find(p => p.tag === tag);
+  const hasName = player?.name && player.name.trim() !== '';
+  
   return (
-    <span className="relative inline-block bg-gradient-to-r from-lime-300 to-lime-400 text-gray-900 w-8 h-8 leading-8 text-center rounded-full mx-1 font-bold shadow-md transform transition-transform hover:scale-110 hover:rotate-3 overflow-hidden">
-      {/* Tennis/Padel ball pattern */}
-      <span className="absolute inset-0 border-2 border-dashed border-gray-800/20 rounded-full"></span>
-      <span className="absolute inset-0 border-t-2 border-gray-800/20 rounded-full transform rotate-45"></span>
-      <span className="relative z-10 text-sm">{tag}</span>
-    </span>
+    <div className="flex items-center group">
+      <div className="bg-padel-blue text-white font-bold w-7 h-7 rounded-full flex items-center justify-center text-sm mr-1">
+        {tag}
+      </div>
+      
+      {hasName && (
+        <span className="text-xs text-gray-400 group-hover:text-white transition-colors">
+          {player.name.split(' ')[0]}
+        </span>
+      )}
+    </div>
   );
 };
 

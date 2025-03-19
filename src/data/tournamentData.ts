@@ -1,9 +1,11 @@
+
 export interface Player {
   id: number;
   tag: string;
+  name: string;
   points: number;
-  pointsScored: number;  // Total points scored
-  pointsConceded: number;  // Total points conceded
+  pointsScored: number;
+  pointsConceded: number;
   rank?: number;
 }
 
@@ -45,6 +47,7 @@ export interface Final {
 export const players: Player[] = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
   tag: (i + 1).toString(),
+  name: '', // Will be filled during registration
   points: 0,
   pointsScored: 0,
   pointsConceded: 0,
@@ -113,6 +116,27 @@ export const calculatePoints = (match: Match) => {
   updatePlayerRankings();
 };
 
+// Randomly assign player numbers
+export const randomizePlayers = (names: string[]) => {
+  // Create a copy of the indices and shuffle them
+  const indices = Array.from({ length: 12 }, (_, i) => i);
+  
+  // Fisher-Yates shuffle algorithm
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  
+  // Assign names to players based on shuffled indices
+  indices.forEach((originalIndex, shuffledIndex) => {
+    if (originalIndex < names.length) {
+      players[shuffledIndex].name = names[originalIndex];
+    }
+  });
+  
+  return [...players];
+};
+
 // Updated timelineSteps based on the image
 export const timelineSteps = [
   { time: "09h00", label: "Accueil joueurs" },
@@ -134,22 +158,22 @@ export const sessions: Session[] = [
     time: "09h30 - 09h50",
     matches: [
       {
-        team1: [players[0], players[1]],
-        team2: [players[2], players[3]],
+        team1: [players[0], players[1]], // (J1,J2)
+        team2: [players[2], players[3]], // (J3,J4)
         court: "Terrain 1"
       },
       {
-        team1: [players[4], players[5]],
-        team2: [players[6], players[7]],
+        team1: [players[4], players[5]], // (J5,J6)
+        team2: [players[6], players[7]], // (J7,J8)
         court: "Terrain 2"
       },
       {
-        team1: [players[8], players[9]],
-        team2: [players[10], players[11]],
+        team1: [players[8], players[9]], // (J9,J10)
+        team2: [players[10], players[11]], // (J11,J12)
         court: "Terrain 3"
       }
     ],
-    pause: "Pause: 09h50 - 09h55"
+    pause: "Pause / Rotation: 5 min"
   },
   {
     id: 2,
@@ -157,22 +181,22 @@ export const sessions: Session[] = [
     time: "09h55 - 10h15",
     matches: [
       {
-        team1: [players[0], players[4]],
-        team2: [players[6], players[10]],
+        team1: [players[1], players[7]], // (J2,J8)
+        team2: [players[8], players[11]], // (J9,J12)
         court: "Terrain 1"
       },
       {
-        team1: [players[1], players[7]],
-        team2: [players[8], players[11]],
+        team1: [players[2], players[5]], // (J3,J6)
+        team2: [players[3], players[9]], // (J4,J10)
         court: "Terrain 2"
       },
       {
-        team1: [players[2], players[5]],
-        team2: [players[3], players[9]],
+        team1: [players[0], players[4]], // (J1,J5)
+        team2: [players[6], players[10]], // (J7,J11)
         court: "Terrain 3"
       }
     ],
-    pause: "Pause: 10h15 - 10h20"
+    pause: "Pause / Rotation: 5 min"
   },
   {
     id: 3,
@@ -180,22 +204,22 @@ export const sessions: Session[] = [
     time: "10h20 - 10h40",
     matches: [
       {
-        team1: [players[0], players[6]],
-        team2: [players[3], players[11]],
+        team1: [players[2], players[8]], // (J3,J9)
+        team2: [players[4], players[10]], // (J5,J11)
         court: "Terrain 1"
       },
       {
-        team1: [players[1], players[9]],
-        team2: [players[5], players[7]],
+        team1: [players[0], players[6]], // (J1,J7)
+        team2: [players[3], players[11]], // (J4,J12)
         court: "Terrain 2"
       },
       {
-        team1: [players[2], players[8]],
-        team2: [players[4], players[10]],
+        team1: [players[1], players[9]], // (J2,J10)
+        team2: [players[5], players[7]], // (J6,J8)
         court: "Terrain 3"
       }
     ],
-    pause: "Pause: 10h40 - 10h45"
+    pause: "Pause / Rotation: 5 min"
   },
   {
     id: 4,
@@ -203,22 +227,22 @@ export const sessions: Session[] = [
     time: "10h45 - 11h05",
     matches: [
       {
-        team1: [players[0], players[9]],
-        team2: [players[4], players[8]],
+        team1: [players[3], players[7]], // (J4,J8)
+        team2: [players[5], players[11]], // (J6,J12)
         court: "Terrain 1"
       },
       {
-        team1: [players[1], players[10]],
-        team2: [players[2], players[6]],
+        team1: [players[0], players[9]], // (J1,J10)
+        team2: [players[4], players[8]], // (J5,J9)
         court: "Terrain 2"
       },
       {
-        team1: [players[3], players[7]],
-        team2: [players[5], players[11]],
+        team1: [players[1], players[10]], // (J2,J11)
+        team2: [players[2], players[6]], // (J3,J7)
         court: "Terrain 3"
       }
     ],
-    pause: "Pause: 11h05 - 11h10"
+    pause: "Pause / Rotation: 5 min"
   },
   {
     id: 5,
@@ -226,18 +250,18 @@ export const sessions: Session[] = [
     time: "11h10 - 11h30",
     matches: [
       {
-        team1: [players[0], players[11]],
-        team2: [players[1], players[5]],
+        team1: [players[2], players[10]], // (J3,J11)
+        team2: [players[7], players[9]], // (J8,J10)
         court: "Terrain 1"
       },
       {
-        team1: [players[2], players[10]],
-        team2: [players[7], players[9]],
+        team1: [players[3], players[8]], // (J4,J9)
+        team2: [players[5], players[6]], // (J6,J7)
         court: "Terrain 2"
       },
       {
-        team1: [players[3], players[8]],
-        team2: [players[4], players[6]],
+        team1: [players[0], players[11]], // (J1,J12)
+        team2: [players[1], players[4]], // (J2,J5)
         court: "Terrain 3"
       }
     ]

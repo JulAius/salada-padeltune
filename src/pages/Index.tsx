@@ -6,6 +6,9 @@ import PhaseGrid from '../components/PhaseGrid';
 import LeaderboardSection from '../components/LeaderboardSection';
 import FinalsSection from '../components/FinalsSection';
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
+import { Button } from '../components/ui/button';
+import { Users } from 'lucide-react';
 
 const Index: React.FC = () => {
   return (
@@ -25,6 +28,16 @@ const Index: React.FC = () => {
             ></div>
           ))}
         </div>
+        
+        <div className="mb-6">
+          <Link to="/tirage">
+            <Button variant="outline" className="w-full bg-gradient-to-r from-amber-500/80 to-amber-600/80 text-white hover:from-amber-500 hover:to-amber-600 border-none shadow-lg hover:shadow-amber-500/20 transform transition-all duration-200 hover:-translate-y-1">
+              <Users className="mr-2 h-4 w-4" />
+              Tirage au Sort des Joueurs
+            </Button>
+          </Link>
+        </div>
+        
         <TournamentHeader />
         <Timeline />
         <PhaseGrid />

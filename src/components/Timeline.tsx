@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Calendar, Users, Flag, Award, ClipboardList, PlayCircle, Coffee } from 'lucide-react';
+import { Calendar, Users, Flag, Award, ClipboardList, PlayCircle, Coffee, Trophy } from 'lucide-react';
 import { timelineSteps } from '../data/tournamentData';
 
 const Timeline: React.FC = () => {

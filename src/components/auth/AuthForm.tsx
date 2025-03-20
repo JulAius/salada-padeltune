@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Label } from '../ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn, signUp } from '../../utils/supabase/auth';
 import { UserPlus, LogIn } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 
 // Form validation schemas
 const loginSchema = z.object({
@@ -29,7 +30,6 @@ const AuthForm: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
 
   const loginForm = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -51,12 +51,10 @@ const AuthForm: React.FC = () => {
   const handleLogin = async (data: LoginValues) => {
     setLoading(true);
     try {
-      // Simulate login - since we're not using authentication anymore
-      toast({
-        title: "Fonctionnalité désactivée",
-        description: "L'authentification a été remplacée par un système de code unique.",
-        variant: "destructive"
-      });
+      const result = await signIn(data);
+      if (!result.error) {
+        setIsOpen(false);
+      }
     } finally {
       setLoading(false);
     }
@@ -65,12 +63,10 @@ const AuthForm: React.FC = () => {
   const handleSignup = async (data: SignupValues) => {
     setLoading(true);
     try {
-      // Simulate signup - since we're not using authentication anymore
-      toast({
-        title: "Fonctionnalité désactivée",
-        description: "L'authentification a été remplacée par un système de code unique.",
-        variant: "destructive"
-      });
+      const result = await signUp(data);
+      if (!result.error) {
+        setIsOpen(false);
+      }
     } finally {
       setLoading(false);
     }
@@ -83,7 +79,7 @@ const AuthForm: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="bg-padel-blue hover:bg-padel-blue/90 gap-2">
+        <Button className="bg-padel-blue hover:bg-padel-blue/90 gap-2">
           {mode === 'login' ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
           {mode === 'login' ? 'Connexion' : 'Inscription'}
         </Button>
@@ -93,11 +89,6 @@ const AuthForm: React.FC = () => {
           <DialogTitle className="text-xl font-bold text-white mb-2">
             {mode === 'login' ? 'Connexion' : 'Créer un compte'}
           </DialogTitle>
-          <DialogDescription className="text-gray-400">
-            {mode === 'login' 
-              ? 'Connectez-vous pour accéder à votre compte' 
-              : 'Inscrivez-vous pour créer un nouveau compte'}
-          </DialogDescription>
         </DialogHeader>
 
         {mode === 'login' ? (

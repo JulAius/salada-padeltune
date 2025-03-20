@@ -1,14 +1,9 @@
 
 import { createClient } from '@supabase/supabase-js';
+import type { Database } from './types';
 
-// Get environment variables for Supabase connection
+// Créer un client Supabase avec les variables d'environnement
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Check if environment variables are defined
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase URL or Anon Key is missing. Check your .env file');
-}
-
-// Create a singleton Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);

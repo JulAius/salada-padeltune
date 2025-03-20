@@ -1,13 +1,14 @@
+
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "./ui/form";
 import { useForm } from "react-hook-form";
 import { players, randomizePlayers } from '../data/tournamentData';
-import { Users, Shuffle, Save, Copy } from 'lucide-react';
+import { Users, Shuffle } from 'lucide-react';
 import { toast } from 'sonner';
-import { saveTournamentWithCode } from '../utils/supabase/services/tournamentCodeService';
 
 interface PlayerRegistrationProps {
   onPlayersRegistered: () => void;
@@ -31,7 +32,6 @@ interface FormValues {
 const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegistered }) => {
   const [open, setOpen] = useState(false);
   const [isRandomized, setIsRandomized] = useState(false);
-  const [accessCode, setAccessCode] = useState<string | null>(null);
   
   const form = useForm<FormValues>({
     defaultValues: {
@@ -61,31 +61,6 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegist
     randomizePlayers(playerNames);
     setIsRandomized(true);
     toast.success("Tirage au sort des numéros effectué avec succès!");
-  };
-
-  const handleSaveTournament = async () => {
-    try {
-      if (!isRandomized) {
-        toast.error("Veuillez d'abord effectuer le tirage au sort des numéros");
-        return;
-      }
-      
-      const result = await saveTournamentWithCode("Tournoi de Padel", "Club de Padel", new Date().toISOString().split('T')[0]);
-      
-      setAccessCode(result.accessCode);
-      
-      toast.success(`Tournoi sauvegardé avec succès! Code d'accès: ${result.accessCode}`);
-    } catch (error) {
-      console.error("Erreur lors de la sauvegarde du tournoi:", error);
-      toast.error("Une erreur est survenue lors de la sauvegarde du tournoi");
-    }
-  };
-
-  const handleCopyCode = () => {
-    if (accessCode) {
-      navigator.clipboard.writeText(accessCode);
-      toast.success("Code copié dans le presse-papier!");
-    }
   };
 
   const handleSubmit = (data: FormValues) => {
@@ -154,23 +129,12 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegist
                   Tirage au Sort des Numéros
                 </Button>
               ) : (
-                <div className="w-full flex flex-col sm:flex-row justify-between gap-3">
-                  <Button
-                    type="submit"
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    Confirmer l'Inscription
-                  </Button>
-                  
-                  <Button
-                    type="button"
-                    onClick={handleSaveTournament}
-                    className="bg-amber-600 hover:bg-amber-700 text-white"
-                  >
-                    <Save className="mr-2 h-4 w-4" />
-                    Sauvegarder et Générer un Code
-                  </Button>
-                </div>
+                <Button
+                  type="submit"
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  Confirmer l'Inscription
+                </Button>
               )}
             </DialogFooter>
           </form>
@@ -189,23 +153,6 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegist
                 </div>
               ))}
             </div>
-          </div>
-        )}
-        
-        {accessCode && (
-          <div className="mt-4 border-t pt-4">
-            <h3 className="font-semibold mb-2">Code d'Accès au Tournoi</h3>
-            <div className="flex items-center space-x-2 bg-gray-700 p-3 rounded-lg">
-              <div className="flex-1 font-mono text-lg bg-gray-800 p-2 rounded">
-                {accessCode}
-              </div>
-              <Button onClick={handleCopyCode} variant="outline" size="icon">
-                <Copy className="h-4 w-4" />
-              </Button>
-            </div>
-            <p className="text-sm text-gray-400 mt-2">
-              Conservez ce code pour accéder à ce tournoi ultérieurement. Vous pourrez le partager avec d'autres personnes.
-            </p>
           </div>
         )}
       </DialogContent>

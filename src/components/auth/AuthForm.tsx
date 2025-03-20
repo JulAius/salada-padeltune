@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Label } from '../ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -51,7 +49,11 @@ const AuthForm: React.FC = () => {
   const handleLogin = async (data: LoginValues) => {
     setLoading(true);
     try {
-      const result = await signIn(data);
+      const result = await signIn({
+        email: data.email,
+        password: data.password,
+      });
+      
       if (!result.error) {
         setIsOpen(false);
       }
@@ -63,7 +65,12 @@ const AuthForm: React.FC = () => {
   const handleSignup = async (data: SignupValues) => {
     setLoading(true);
     try {
-      const result = await signUp(data);
+      const result = await signUp({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      });
+      
       if (!result.error) {
         setIsOpen(false);
       }
@@ -79,7 +86,7 @@ const AuthForm: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-padel-blue hover:bg-padel-blue/90 gap-2">
+        <Button variant="default" className="bg-padel-blue hover:bg-padel-blue/90 gap-2">
           {mode === 'login' ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
           {mode === 'login' ? 'Connexion' : 'Inscription'}
         </Button>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -50,7 +49,6 @@ const AuthForm: React.FC = () => {
   const handleLogin = async (data: LoginValues) => {
     setLoading(true);
     try {
-      // Fix: Ensure we're passing a valid SignInCredentials object
       const result = await signIn({
         email: data.email,
         password: data.password,
@@ -67,7 +65,6 @@ const AuthForm: React.FC = () => {
   const handleSignup = async (data: SignupValues) => {
     setLoading(true);
     try {
-      // Fix: Ensure we're passing a valid SignUpCredentials object
       const result = await signUp({
         email: data.email,
         password: data.password,
@@ -89,7 +86,7 @@ const AuthForm: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-padel-blue hover:bg-padel-blue/90 gap-2">
+        <Button variant="default" className="bg-padel-blue hover:bg-padel-blue/90 gap-2">
           {mode === 'login' ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
           {mode === 'login' ? 'Connexion' : 'Inscription'}
         </Button>

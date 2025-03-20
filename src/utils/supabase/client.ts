@@ -1,9 +1,9 @@
 
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from './types';
 
-// Créer un client Supabase avec les variables d'environnement
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Set default environment variables if they are not provided
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+// Create a singleton Supabase client
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

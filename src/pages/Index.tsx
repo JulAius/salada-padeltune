@@ -9,6 +9,7 @@ import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Users } from 'lucide-react';
+import UserMenu from '../components/auth/UserMenu';
 
 const Index: React.FC = () => {
   return (
@@ -29,7 +30,10 @@ const Index: React.FC = () => {
           ))}
         </div>
         
-        <TournamentHeader />
+        <div className="flex justify-between items-center mb-6">
+          <TournamentHeader />
+          <UserMenu />
+        </div>
         
         <div className="mb-6">
           <Link to="/tirage">

@@ -10,11 +10,5 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Supabase URL or Anon Key is missing. Check your .env file');
 }
 
-// Create a singleton Supabase client with proper configuration
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true
-  }
-});
+// Create a singleton Supabase client
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

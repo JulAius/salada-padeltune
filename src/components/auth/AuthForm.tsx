@@ -7,8 +7,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn, signUp } from '../../utils/supabase/auth';
 import { UserPlus, LogIn } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 // Form validation schemas
 const loginSchema = z.object({
@@ -29,6 +29,7 @@ const AuthForm: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const loginForm = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -50,14 +51,12 @@ const AuthForm: React.FC = () => {
   const handleLogin = async (data: LoginValues) => {
     setLoading(true);
     try {
-      const result = await signIn({
-        email: data.email,
-        password: data.password,
+      // Simulate login - since we're not using authentication anymore
+      toast({
+        title: "Fonctionnalité désactivée",
+        description: "L'authentification a été remplacée par un système de code unique.",
+        variant: "destructive"
       });
-      
-      if (!result.error) {
-        setIsOpen(false);
-      }
     } finally {
       setLoading(false);
     }
@@ -66,15 +65,12 @@ const AuthForm: React.FC = () => {
   const handleSignup = async (data: SignupValues) => {
     setLoading(true);
     try {
-      const result = await signUp({
-        email: data.email,
-        password: data.password,
-        name: data.name,
+      // Simulate signup - since we're not using authentication anymore
+      toast({
+        title: "Fonctionnalité désactivée",
+        description: "L'authentification a été remplacée par un système de code unique.",
+        variant: "destructive"
       });
-      
-      if (!result.error) {
-        setIsOpen(false);
-      }
     } finally {
       setLoading(false);
     }

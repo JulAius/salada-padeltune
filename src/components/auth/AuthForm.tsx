@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Label } from '../ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -51,7 +50,12 @@ const AuthForm: React.FC = () => {
   const handleLogin = async (data: LoginValues) => {
     setLoading(true);
     try {
-      const result = await signIn(data);
+      // Fix: Ensure we're passing a valid SignInCredentials object
+      const result = await signIn({
+        email: data.email,
+        password: data.password,
+      });
+      
       if (!result.error) {
         setIsOpen(false);
       }
@@ -63,7 +67,13 @@ const AuthForm: React.FC = () => {
   const handleSignup = async (data: SignupValues) => {
     setLoading(true);
     try {
-      const result = await signUp(data);
+      // Fix: Ensure we're passing a valid SignUpCredentials object
+      const result = await signUp({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      });
+      
       if (!result.error) {
         setIsOpen(false);
       }

@@ -15,16 +15,19 @@ export type SignUpCredentials = {
 
 export async function signIn({ email, password }: SignInCredentials) {
   try {
+    console.log('Signing in with:', { email });
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
+      console.error('Sign in error:', error);
       toast.error(error.message);
       return { user: null, error };
     }
 
+    console.log('Sign in successful', data);
     toast.success('Connexion réussie!');
     return { user: data.user, session: data.session, error: null };
   } catch (err) {
@@ -36,6 +39,7 @@ export async function signIn({ email, password }: SignInCredentials) {
 
 export async function signUp({ email, password, name }: SignUpCredentials) {
   try {
+    console.log('Signing up with:', { email, name });
     // Create user in Supabase Auth
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -48,10 +52,12 @@ export async function signUp({ email, password, name }: SignUpCredentials) {
     });
 
     if (error) {
+      console.error('Sign up error:', error);
       toast.error(error.message);
       return { user: null, error };
     }
 
+    console.log('Sign up successful', data);
     toast.success('Compte créé avec succès!');
     return { user: data.user, session: data.session, error: null };
   } catch (err) {

@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -96,6 +97,11 @@ const AuthForm: React.FC = () => {
           <DialogTitle className="text-xl font-bold text-white mb-2">
             {mode === 'login' ? 'Connexion' : 'Créer un compte'}
           </DialogTitle>
+          <DialogDescription className="text-gray-400">
+            {mode === 'login' 
+              ? 'Connectez-vous pour accéder à votre compte' 
+              : 'Inscrivez-vous pour créer un nouveau compte'}
+          </DialogDescription>
         </DialogHeader>
 
         {mode === 'login' ? (

@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "./ui/form";
 import { useForm } from "react-hook-form";
 import { players, randomizePlayers } from '../data/tournamentData';
@@ -67,16 +65,13 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegist
 
   const handleSaveTournament = async () => {
     try {
-      // Check if players have been randomized
       if (!isRandomized) {
         toast.error("Veuillez d'abord effectuer le tirage au sort des numéros");
         return;
       }
       
-      // Save tournament with a unique code
       const result = await saveTournamentWithCode("Tournoi de Padel", "Club de Padel", new Date().toISOString().split('T')[0]);
       
-      // Set the access code to display it to the user
       setAccessCode(result.accessCode);
       
       toast.success(`Tournoi sauvegardé avec succès! Code d'accès: ${result.accessCode}`);

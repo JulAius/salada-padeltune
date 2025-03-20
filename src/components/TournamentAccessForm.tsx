@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "./ui/form";
@@ -8,8 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from 'sonner';
-import { generateUniqueCode, saveTournamentWithCode, getTournamentByCode } from '../utils/supabase/services/tournamentCodeService';
-import { players, randomizePlayers } from '../data/tournamentData';
+import { getTournamentByCode } from '../utils/supabase/services/tournamentCodeService';
 import { useNavigate } from 'react-router-dom';
 
 // Define form schema
@@ -67,6 +66,9 @@ const TournamentAccessForm: React.FC<TournamentAccessFormProps> = ({ onAccessTou
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Accéder à un Tournoi</DialogTitle>
+          <DialogDescription className="text-gray-400">
+            Entrez le code d'accès du tournoi que vous souhaitez consulter
+          </DialogDescription>
         </DialogHeader>
         
         <Form {...form}>

@@ -3,15 +3,18 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "./ui/form";
 import { useForm } from "react-hook-form";
 import { players, randomizePlayers } from '../data/tournamentData';
-import { Users, Shuffle } from 'lucide-react';
+import { Users, Shuffle, Save } from 'lucide-react';
 import { toast } from 'sonner';
+import { saveTournamentWithCode } from '../utils/supabase/services/tournamentCodeService';
 
 interface PlayerRegistrationProps {
   onPlayersRegistered: () => void;
+  tournamentName: string;
+  tournamentLocation: string;
+  tournamentDate: string;
 }
 
 interface FormValues {
@@ -29,9 +32,16 @@ interface FormValues {
   player12: string;
 }
 
-const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegistered }) => {
+const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ 
+  onPlayersRegistered, 
+  tournamentName, 
+  tournamentLocation, 
+  tournamentDate 
+}) => {
   const [open, setOpen] = useState(false);
   const [isRandomized, setIsRandomized] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [tournamentCode, setTournamentCode] = useState('');
   
   const form = useForm<FormValues>({
     defaultValues: {
@@ -61,6 +71,32 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegist
     randomizePlayers(playerNames);
     setIsRandomized(true);
     toast.success("Tirage au sort des numéros effectué avec succès!");
+  };
+
+  const handleSaveTournament = async () => {
+    if (!isRandomized) {
+      toast.error("Veuillez d'abord effectuer le tirage au sort des numéros");
+      return;
+    }
+    
+    setIsSaving(true);
+    try {
+      const result = await saveTournamentWithCode(
+        tournamentName,
+        tournamentLocation,
+        tournamentDate
+      );
+      
+      if (result.success) {
+        setTournamentCode(result.code);
+        toast.success(`Tournoi sauvegardé! Votre code d'accès: ${result.code}`);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde du tournoi:', error);
+      toast.error('Une erreur est survenue lors de la sauvegarde du tournoi');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleSubmit = (data: FormValues) => {
@@ -129,12 +165,23 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegist
                   Tirage au Sort des Numéros
                 </Button>
               ) : (
-                <Button
-                  type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                >
-                  Confirmer l'Inscription
-                </Button>
+                <>
+                  <Button
+                    type="button"
+                    onClick={handleSaveTournament}
+                    className="bg-amber-600 hover:bg-amber-700 text-white"
+                    disabled={isSaving}
+                  >
+                    <Save className="mr-2 h-4 w-4" />
+                    {isSaving ? "Sauvegarde..." : "Sauvegarder & Générer Code"}
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    Confirmer l'Inscription
+                  </Button>
+                </>
               )}
             </DialogFooter>
           </form>
@@ -153,6 +200,18 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onPlayersRegist
                 </div>
               ))}
             </div>
+          </div>
+        )}
+        
+        {tournamentCode && (
+          <div className="mt-4 p-4 border border-amber-500/30 bg-amber-900/20 rounded-lg">
+            <h3 className="font-bold text-amber-300 mb-2">Code d'accès au tournoi</h3>
+            <div className="bg-gray-800 p-3 rounded-md text-center">
+              <span className="text-lg font-mono font-bold tracking-wider text-amber-300">{tournamentCode}</span>
+            </div>
+            <p className="text-sm text-amber-300/80 mt-2">
+              Conservez ce code! Il vous permettra de retrouver ce tournoi ultérieurement.
+            </p>
           </div>
         )}
       </DialogContent>

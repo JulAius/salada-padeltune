@@ -3,11 +3,19 @@ import React, { useState } from 'react';
 import { players } from '../data/tournamentData';
 import PlayerRegistration from '../components/PlayerRegistration';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Users, Dices } from 'lucide-react';
+import { ArrowLeft, Users, Dices, Calendar, MapPin } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import TournamentAccessForm from '../components/TournamentAccessForm';
 
 const DrawPage: React.FC = () => {
   const [playersRegistered, setPlayersRegistered] = useState(false);
+  const [tournamentName, setTournamentName] = useState('Tournoi de Padel');
+  const [tournamentLocation, setTournamentLocation] = useState('');
+  const [tournamentDate, setTournamentDate] = useState(
+    new Date().toISOString().split('T')[0]
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
@@ -31,6 +39,51 @@ const DrawPage: React.FC = () => {
               pour attribuer aléatoirement les numéros de 1 à 12 à chaque joueur.
             </p>
             
+            <TournamentAccessForm />
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="space-y-2">
+                <Label htmlFor="tournamentName">Nom du tournoi</Label>
+                <div className="relative">
+                  <Input
+                    id="tournamentName"
+                    value={tournamentName}
+                    onChange={(e) => setTournamentName(e.target.value)}
+                    className="bg-gray-700 border-gray-600 text-white"
+                    placeholder="Nom du tournoi"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="tournamentDate">Date</Label>
+                <div className="relative">
+                  <Input
+                    id="tournamentDate"
+                    type="date"
+                    value={tournamentDate}
+                    onChange={(e) => setTournamentDate(e.target.value)}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                  <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="tournamentLocation">Lieu</Label>
+                <div className="relative">
+                  <Input
+                    id="tournamentLocation"
+                    value={tournamentLocation}
+                    onChange={(e) => setTournamentLocation(e.target.value)}
+                    className="bg-gray-700 border-gray-600 text-white"
+                    placeholder="Lieu du tournoi"
+                  />
+                  <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                </div>
+              </div>
+            </div>
+            
             <div className="bg-amber-900/30 border border-amber-700/50 rounded-lg p-5 text-amber-200 mb-8 shadow-inner">
               <h3 className="font-bold flex items-center gap-2 mb-3 text-amber-100">
                 <Users className="h-5 w-5" />
@@ -40,12 +93,18 @@ const DrawPage: React.FC = () => {
                 <li>Cliquez sur le bouton "Inscription des Joueurs"</li>
                 <li>Saisissez les noms des 12 participants</li>
                 <li>Cliquez sur "Tirage au Sort des Numéros" pour attribuer aléatoirement les numéros</li>
-                <li>Vérifiez les résultats et validez avec "Confirmer l'Inscription"</li>
+                <li>Sauvegardez votre tournoi pour obtenir un code d'accès</li>
+                <li>Validez avec "Confirmer l'Inscription"</li>
               </ol>
             </div>
             
             <div className="mb-6 transform transition-all duration-300 hover:scale-[1.01]">
-              <PlayerRegistration onPlayersRegistered={() => setPlayersRegistered(true)} />
+              <PlayerRegistration 
+                onPlayersRegistered={() => setPlayersRegistered(true)} 
+                tournamentName={tournamentName}
+                tournamentLocation={tournamentLocation}
+                tournamentDate={tournamentDate}
+              />
             </div>
           </div>
           

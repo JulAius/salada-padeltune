@@ -16,6 +16,11 @@ const PodiumSection: React.FC = () => {
     return null;
   }
 
+  // Helper function to get player by tag
+  const getPlayerByTag = (tag: string) => {
+    return players.find(p => p.tag === tag);
+  };
+
   return (
     <div className="transform transition-all duration-500 hover:shadow-xl rounded-lg overflow-hidden">
       <div className="bg-gradient-to-r from-padel-gold to-padel-orange text-gray-900 p-4 text-center text-2xl rounded-t-lg flex items-center justify-center gap-2 font-bold">
@@ -40,9 +45,9 @@ const PodiumSection: React.FC = () => {
             <div className="bg-gray-900/70 border border-gray-700 rounded-lg p-4 mb-4 relative z-10">
               <div className="text-padel-gold text-sm font-semibold mb-2">🥇 CHAMPIONS</div>
               <div className="flex justify-center">
-                {winners.champions.winners.map(id => {
-                  const player = players.find(p => p.id === id);
-                  return player ? <PlayerTag key={id} tag={player.tag} /> : null;
+                {winners.champions.winners.map(tag => {
+                  const player = getPlayerByTag(tag.toString());
+                  return player ? <PlayerTag key={player.id} tag={player.tag} /> : null;
                 })}
               </div>
             </div>
@@ -50,9 +55,9 @@ const PodiumSection: React.FC = () => {
             <div className="bg-gray-900/70 border border-gray-700 rounded-lg p-4 relative z-10">
               <div className="text-gray-300 text-sm font-semibold mb-2">🥈 FINALISTES</div>
               <div className="flex justify-center">
-                {winners.champions.runners.map(id => {
-                  const player = players.find(p => p.id === id);
-                  return player ? <PlayerTag key={id} tag={player.tag} /> : null;
+                {winners.champions.runners.map(tag => {
+                  const player = getPlayerByTag(tag.toString());
+                  return player ? <PlayerTag key={player.id} tag={player.tag} /> : null;
                 })}
               </div>
             </div>
@@ -75,9 +80,9 @@ const PodiumSection: React.FC = () => {
             <div className="bg-gray-900/70 border border-gray-700 rounded-lg p-4 mb-4 relative z-10">
               <div className="text-padel-blue text-sm font-semibold mb-2">🥇 CHAMPIONS</div>
               <div className="flex justify-center">
-                {winners.europa.winners.map(id => {
-                  const player = players.find(p => p.id === id);
-                  return player ? <PlayerTag key={id} tag={player.tag} /> : null;
+                {winners.europa.winners.map(tag => {
+                  const player = getPlayerByTag(tag.toString());
+                  return player ? <PlayerTag key={player.id} tag={player.tag} /> : null;
                 })}
               </div>
             </div>
@@ -85,9 +90,9 @@ const PodiumSection: React.FC = () => {
             <div className="bg-gray-900/70 border border-gray-700 rounded-lg p-4 relative z-10">
               <div className="text-gray-300 text-sm font-semibold mb-2">🥈 FINALISTES</div>
               <div className="flex justify-center">
-                {winners.europa.runners.map(id => {
-                  const player = players.find(p => p.id === id);
-                  return player ? <PlayerTag key={id} tag={player.tag} /> : null;
+                {winners.europa.runners.map(tag => {
+                  const player = getPlayerByTag(tag.toString());
+                  return player ? <PlayerTag key={player.id} tag={player.tag} /> : null;
                 })}
               </div>
             </div>
@@ -110,9 +115,9 @@ const PodiumSection: React.FC = () => {
             <div className="bg-gray-900/70 border border-gray-700 rounded-lg p-4 mb-4 relative z-10">
               <div className="text-padel-green text-sm font-semibold mb-2">🥇 CHAMPIONS</div>
               <div className="flex justify-center">
-                {winners.conference.winners.map(id => {
-                  const player = players.find(p => p.id === id);
-                  return player ? <PlayerTag key={id} tag={player.tag} /> : null;
+                {winners.conference.winners.map(tag => {
+                  const player = getPlayerByTag(tag.toString());
+                  return player ? <PlayerTag key={player.id} tag={player.tag} /> : null;
                 })}
               </div>
             </div>
@@ -120,9 +125,9 @@ const PodiumSection: React.FC = () => {
             <div className="bg-gray-900/70 border border-gray-700 rounded-lg p-4 relative z-10">
               <div className="text-gray-300 text-sm font-semibold mb-2">🥈 FINALISTES</div>
               <div className="flex justify-center">
-                {winners.conference.runners.map(id => {
-                  const player = players.find(p => p.id === id);
-                  return player ? <PlayerTag key={id} tag={player.tag} /> : null;
+                {winners.conference.runners.map(tag => {
+                  const player = getPlayerByTag(tag.toString());
+                  return player ? <PlayerTag key={player.id} tag={player.tag} /> : null;
                 })}
               </div>
             </div>

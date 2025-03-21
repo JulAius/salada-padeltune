@@ -34,8 +34,8 @@ export interface Final {
   participants: string;
   court: string;
   players: {
-    team1: number[];
-    team2: number[];
+    team1: (string | number)[];
+    team2: (string | number)[];
   };
   score?: {
     team1: number;
@@ -276,8 +276,8 @@ export const finals: Final[] = [
     participants: "Top 1 à 4",
     court: "Terrain 1",
     players: {
-      team1: [1, 4],
-      team2: [2, 3]
+      team1: ["1", "4"], // Tags or ranks des joueurs
+      team2: ["2", "3"]
     }
   },
   {
@@ -287,8 +287,8 @@ export const finals: Final[] = [
     participants: "Joueurs classés 5 à 8",
     court: "Terrain 2",
     players: {
-      team1: [5, 8],
-      team2: [6, 7]
+      team1: ["5", "8"],
+      team2: ["6", "7"]
     }
   },
   {
@@ -298,8 +298,8 @@ export const finals: Final[] = [
     participants: "Joueurs classés 9 à 12",
     court: "Terrain 3",
     players: {
-      team1: [9, 12],
-      team2: [10, 11]
+      team1: ["9", "12"],
+      team2: ["10", "11"]
     }
   }
 ];
@@ -307,9 +307,9 @@ export const finals: Final[] = [
 // Function to get winners from finals
 export const getFinalWinners = () => {
   const winners = {
-    champions: { winners: [] as number[], runners: [] as number[] },
-    europa: { winners: [] as number[], runners: [] as number[] },
-    conference: { winners: [] as number[], runners: [] as number[] }
+    champions: { winners: [] as (string | number)[], runners: [] as (string | number)[] },
+    europa: { winners: [] as (string | number)[], runners: [] as (string | number)[] },
+    conference: { winners: [] as (string | number)[], runners: [] as (string | number)[] }
   };
 
   finals.forEach(final => {

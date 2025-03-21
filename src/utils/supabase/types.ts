@@ -17,7 +17,7 @@ export interface Database {
           created_at: string
           date: string
           location: string
-          user_id: string | null
+          access_code: string
         }
         Insert: {
           id?: string
@@ -25,7 +25,7 @@ export interface Database {
           created_at?: string
           date: string
           location: string
-          user_id?: string | null
+          access_code: string
         }
         Update: {
           id?: string
@@ -33,7 +33,7 @@ export interface Database {
           created_at?: string
           date?: string
           location?: string
-          user_id?: string | null
+          access_code?: string
         }
       }
       players: {
@@ -127,21 +127,21 @@ export interface Database {
         Row: {
           id: string
           match_id: string
-          player_id: string
+          player_tag: string
           team: 'team1' | 'team2'
           created_at: string
         }
         Insert: {
           id?: string
           match_id: string
-          player_id: string
+          player_tag: string
           team: 'team1' | 'team2'
           created_at?: string
         }
         Update: {
           id?: string
           match_id?: string
-          player_id?: string
+          player_tag?: string
           team?: 'team1' | 'team2'
           created_at?: string
         }
@@ -185,21 +185,21 @@ export interface Database {
         Row: {
           id: string
           final_id: string
-          player_id: string
+          player_tag: string
           team: 'team1' | 'team2'
           created_at: string
         }
         Insert: {
           id?: string
           final_id: string
-          player_id: string
+          player_tag: string
           team: 'team1' | 'team2'
           created_at?: string
         }
         Update: {
           id?: string
           final_id?: string
-          player_id?: string
+          player_tag?: string
           team?: 'team1' | 'team2'
           created_at?: string
         }

@@ -70,9 +70,44 @@ const FinalCard: React.FC<FinalCardProps> = ({ final, onResultUpdate }) => {
     setIsEditing(true);
   };
 
-  // Get actual player objects
-  const team1Players = final.players.team1.map(id => players.find(p => p.id === id)!);
-  const team2Players = final.players.team2.map(id => players.find(p => p.id === id)!);
+  // Get players by their ranking position instead of player number
+  const getPlayersByRank = (rankRange: number[]) => {
+    // Get sorted players by rank
+    const sortedPlayers = [...players].sort((a, b) => (a.rank || 99) - (b.rank || 99));
+    
+    // Get players in the specified rank range
+    return rankRange.map(position => {
+      const index = position - 1; // Convert 1-based position to 0-based index
+      return (index >= 0 && index < sortedPlayers.length) ? sortedPlayers[index] : null;
+    }).filter(p => p !== null) as typeof players;
+  };
+
+  // Get team players based on final type
+  const getTeamPlayers = () => {
+    switch (final.type) {
+      case 'champions':
+        return {
+          team1: getPlayersByRank([1, 4]), // 1st and 4th ranked players
+          team2: getPlayersByRank([2, 3])  // 2nd and 3rd ranked players
+        };
+      case 'europa':
+        return {
+          team1: getPlayersByRank([5, 8]), // 5th and 8th ranked players
+          team2: getPlayersByRank([6, 7])  // 6th and 7th ranked players
+        };
+      case 'conference':
+        return {
+          team1: getPlayersByRank([9, 12]), // 9th and 12th ranked players
+          team2: getPlayersByRank([10, 11]) // 10th and 11th ranked players
+        };
+      default:
+        return { team1: [], team2: [] };
+    }
+  };
+
+  const teamPlayers = getTeamPlayers();
+  const team1Players = teamPlayers.team1;
+  const team2Players = teamPlayers.team2;
 
   return (
     <div className="border border-gray-700 rounded-lg overflow-hidden transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl bg-gray-800">
